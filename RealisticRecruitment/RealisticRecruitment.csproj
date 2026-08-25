@@ -79,7 +79,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LordRecruitment.cs" />
+    <Compile Include="PatchManager.cs" />
     <Compile Include="PlayerRecruitment.cs" />
+    <Compile Include="Policy_RoyalLevyRight.cs" />
     <Compile Include="SubModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

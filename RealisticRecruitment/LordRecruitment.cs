@@ -3,6 +3,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 
 namespace RealisticRecruitment
 {
@@ -39,15 +40,17 @@ namespace RealisticRecruitment
         {
             Clan recruiterClan = mobileParty.LeaderHero.Clan;
             Clan ownerClan = settlement.OwnerClan;
+            PolicyObject royalLevyRight = Game.Current.ObjectManager.GetObject<PolicyObject>(Policy_RoyalLevyRight_Create.RoyalLevyRightId);
 
             if (FactionManager.IsAtWarAgainstFaction(recruiterClan, ownerClan)) return false;
 
             int relation = recruiterClan.Leader.GetRelation(ownerClan.Leader);
             bool sameKingdom = recruiterClan.Kingdom != null && ownerClan.Kingdom != null && recruiterClan.Kingdom == ownerClan.Kingdom;
-            bool isKingFromSameKingdom = sameKingdom && recruiterClan.Leader == recruiterClan.Kingdom.Leader;
+            bool isKingWithRoyalLevyRight = sameKingdom && recruiterClan.Leader == recruiterClan.Kingdom.Leader && recruiterClan.Kingdom.HasPolicy(royalLevyRight);
 
-            if ((relation >= 25 && sameKingdom) || isKingFromSameKingdom) return true;
-            if (relation >= 75) return true;
+            if (relation >= 40 && sameKingdom) return true;
+            if (relation >= 80) return true;
+            if (isKingWithRoyalLevyRight) return true;
             return false;
         }
     }
