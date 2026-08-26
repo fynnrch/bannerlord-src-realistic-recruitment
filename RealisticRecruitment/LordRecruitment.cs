@@ -48,8 +48,8 @@ namespace RealisticRecruitment
             bool sameKingdom = recruiterClan.Kingdom != null && ownerClan.Kingdom != null && recruiterClan.Kingdom == ownerClan.Kingdom;
             bool isKingWithRoyalLevyRight = sameKingdom && recruiterClan.Leader == recruiterClan.Kingdom.Leader && recruiterClan.Kingdom.HasPolicy(royalLevyRight);
 
-            if (relation >= 40 && sameKingdom) return true;
-            if (relation >= 80) return true;
+            if (relation >= ConfigFile.ConfigData.InternalRecruitmentRelationThreshold && sameKingdom) return true;
+            if (relation >= ConfigFile.ConfigData.ExternalRecruitmentRelationThreshold) return true;
             if (isKingWithRoyalLevyRight) return true;
             return false;
         }

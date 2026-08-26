@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.Library;
 
 namespace RealisticRecruitment
@@ -30,38 +31,47 @@ namespace RealisticRecruitment
             }
             catch (Exception exception)
             {
-                foreach (Type patchType in appliedPatches) harmony.CreateClassProcessor(patchType).Unpatch();
+                foreach (Type patchType in appliedPatches)
+                {
+                    try { harmony.CreateClassProcessor(patchType).Unpatch(); }
+                    catch (Exception innerException) {
+                        ErrorFile.Write(
+                            $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}]\n" +
+                            $"Unpatch failed: {patchType.Name}\n" +
+                            $"{innerException}\n" +
+                            "----------------------------------------"
+                        );
+                    }
+                }
 
                 failedPatches.Add(new PatchError
                 {
                     patchTypes = patchTypes,
                     exception = exception
                 });
+
+                ErrorFile.Write(
+                    $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}]\n" +
+                    $"Patch failed: {string.Join(", ", patchTypes.Select(x => x.Name))}\n" +
+                    $"{exception}\n" +
+                    "----------------------------------------"
+                );
             }
         }
 
         internal static void ShowPatchErrors()
         {
-            ShowNextPatchError();
-        }
-
-        private static void ShowNextPatchError(int i = 0)
-        {
-            if (i >= failedPatches.Count) return;
-
-            PatchError failedPatch = failedPatches[i];
-            string patchTypesString = string.Empty;
-            foreach (Type patchType in failedPatch.patchTypes) patchTypesString += patchType.Name + "\n";
+            if (failedPatches.Count == 0) return;
 
             InformationManager.ShowInquiry(
                 new InquiryData(
-                    $"Realistic Recruitment",
-                    $"Exception:\n{failedPatch.exception.GetType().FullName}\n\nDisabled Features:\n{patchTypesString}",
+                    $"[RealisticRecruitment]\nDisabled Features",
+                    $"{string.Join("\n", failedPatches.Select(x => $"{string.Join(", ", x.patchTypes.Select(t => t.Name))} - {x.exception.Message}"))}\n\nSee error.log for more details.",
                     true,
                     false,
                     "Continue",
                     null,
-                    () => { ShowNextPatchError(++i); },
+                    null,
                     null
                 )
             );
