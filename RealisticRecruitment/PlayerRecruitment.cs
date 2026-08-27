@@ -43,14 +43,17 @@ namespace RealisticRecruitment
         {
             Clan heroClan = hero.Clan;
             Clan ownerClan = settlement.OwnerClan;
+            PolicyObject nobleLevyRight = Game.Current.ObjectManager.GetObject<PolicyObject>(Policy_NobleLevyRight_Create.NobleLevyRightId);
             PolicyObject royalLevyRight = Game.Current.ObjectManager.GetObject<PolicyObject>(Policy_RoyalLevyRight_Create.RoyalLevyRightId);
 
             int relation = heroClan.Leader.GetRelation(ownerClan.Leader);
             bool sameKingdom = heroClan.Kingdom != null && ownerClan.Kingdom != null && heroClan.Kingdom == ownerClan.Kingdom;
+            bool isLordWithNobleLevyRight = sameKingdom && heroClan.Kingdom.HasPolicy(nobleLevyRight);
             bool isKingWithRoyalLevyRight = sameKingdom && heroClan.Leader == heroClan.Kingdom.Leader && heroClan.Kingdom.HasPolicy(royalLevyRight);
 
             if (relation >= ConfigFile.ConfigData.InternalRecruitmentRelationThreshold && sameKingdom) return true;
             if (relation >= ConfigFile.ConfigData.ExternalRecruitmentRelationThreshold) return true;
+            if (isLordWithNobleLevyRight) return true;
             if (isKingWithRoyalLevyRight) return true;
             return false;
         }

@@ -95,5 +95,6 @@ namespace RealisticRecruitment
     {
         public int InternalRecruitmentRelationThreshold = 40;
         public int ExternalRecruitmentRelationThreshold = 80;
+        public bool RestrictTroopSpawnrate = true;
     }
 }
