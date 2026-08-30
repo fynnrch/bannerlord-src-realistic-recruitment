@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace RealisticRecruitment
+namespace RealisticRecruitment.Tools
 {
     internal static class CustomData
     {
@@ -67,9 +67,9 @@ namespace RealisticRecruitment
             string json = File.ReadAllText(path_ConfigFile);
 
             try
-            { 
-                ConfigData = JsonConvert.DeserializeObject<ConfigData>(json) ?? new ConfigData(); 
-                
+            {
+                ConfigData = JsonConvert.DeserializeObject<ConfigData>(json) ?? new ConfigData();
+
                 Validate();
             }
             catch
@@ -85,6 +85,7 @@ namespace RealisticRecruitment
         {
             ConfigData.InternalRecruitmentRelationThreshold = Math.Max(-100, Math.Min(100, ConfigData.InternalRecruitmentRelationThreshold));
             ConfigData.ExternalRecruitmentRelationThreshold = Math.Max(-100, Math.Min(100, ConfigData.ExternalRecruitmentRelationThreshold));
+            ConfigData.TroopExperienceRate = Math.Max(0, Math.Min(100, ConfigData.TroopExperienceRate));
 
             string json = JsonConvert.SerializeObject(ConfigData, Formatting.Indented);
             File.WriteAllText(path_ConfigFile, json);
@@ -96,5 +97,6 @@ namespace RealisticRecruitment
         public int InternalRecruitmentRelationThreshold = 40;
         public int ExternalRecruitmentRelationThreshold = 80;
         public bool RestrictTroopSpawnrate = true;
+        public int TroopExperienceRate = 20;
     }
 }

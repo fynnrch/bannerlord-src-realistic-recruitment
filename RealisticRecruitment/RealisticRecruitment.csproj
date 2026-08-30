@@ -83,15 +83,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileManager.cs" />
-    <Compile Include="LordRecruitment.cs" />
-    <Compile Include="PatchManager.cs" />
-    <Compile Include="PlayerRecruitment.cs" />
-    <Compile Include="Policy_NobleLevyRight.cs" />
-    <Compile Include="Policy_RoyalLevyRight.cs" />
+    <Compile Include="Adjustments\TroopExperience.cs" />
+    <Compile Include="Tools\FileManager.cs" />
+    <Compile Include="Recruitment\LordRecruitment.cs" />
+    <Compile Include="Tools\PatchManager.cs" />
+    <Compile Include="Recruitment\PlayerRecruitment.cs" />
+    <Compile Include="Policies\Policy_NobleLevyRight.cs" />
+    <Compile Include="Policies\Policy_RoyalLevyRight.cs" />
+    <Compile Include="Recruitment\RecruitmentRestrictions.cs" />
     <Compile Include="SubModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TroopSpawnrate.cs" />
+    <Compile Include="Adjustments\TroopSpawnrate.cs" />
+    <Compile Include="Tools\PrintManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,44 +1,30 @@
-﻿using HarmonyLib;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.CampaignBehaviors;
-using TaleWorlds.CampaignSystem.Party;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
-namespace RealisticRecruitment
+using RealisticRecruitment.Policies;
+using RealisticRecruitment.Tools;
+
+namespace RealisticRecruitment.Recruitment
 {
-    [HarmonyPatch(typeof(RecruitmentCampaignBehavior), "RecruitVolunteersFromNotable")]
-    internal static class LordRecruitment
+    internal class RecruitmentRestrictions
     {
-        [HarmonyPrefix]
-        private static bool Prefix(MobileParty mobileParty, Settlement settlement)
+        internal static bool isHeroAllowedToRecruitInSettlement(Hero hero, Settlement settlement)
         {
-            // filter non lord partys
-            if (!mobileParty.IsLordParty) return true;
-
-            // custom rule: isNpcAllowedToRecruitInSettlement
-            if (isNpcAllowedToRecruitInSettlement(mobileParty, settlement)) return true;
-
-            // forbid recruiting
+            if (isHeroFromOwnerClan(hero, settlement)) return true;
+            if (isHeroAllowedToRecruitAsForeigner(hero, settlement)) return true;
             return false;
         }
 
-        private static bool isNpcAllowedToRecruitInSettlement(MobileParty mobileParty, Settlement settlement)
+        private static bool isHeroFromOwnerClan(Hero hero, Settlement settlement)
         {
-            if (isNpcFromOwnerClan(mobileParty, settlement)) return true;
-            if (isNpcAllowedToRecruitAsForeigner(mobileParty, settlement)) return true;
+            if (hero.Clan == settlement.OwnerClan) return true;
             return false;
         }
 
-        private static bool isNpcFromOwnerClan(MobileParty mobileParty, Settlement settlement)
+        private static bool isHeroAllowedToRecruitAsForeigner(Hero hero, Settlement settlement)
         {
-            if (mobileParty.LeaderHero.Clan == settlement.OwnerClan) return true;
-            return false;
-        }
-
-        private static bool isNpcAllowedToRecruitAsForeigner(MobileParty mobileParty, Settlement settlement)
-        {
-            Clan recruiterClan = mobileParty.LeaderHero.Clan;
+            Clan recruiterClan = hero.Clan;
             Clan ownerClan = settlement.OwnerClan;
             PolicyObject nobleLevyRight = Game.Current.ObjectManager.GetObject<PolicyObject>(Policy_NobleLevyRight_Create.NobleLevyRightId);
             PolicyObject royalLevyRight = Game.Current.ObjectManager.GetObject<PolicyObject>(Policy_RoyalLevyRight_Create.RoyalLevyRightId);

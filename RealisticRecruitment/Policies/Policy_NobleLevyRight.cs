@@ -5,7 +5,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace RealisticRecruitment
+namespace RealisticRecruitment.Policies
 {
     [HarmonyPatch(typeof(Campaign), "InitializeDefaultCampaignObjects")]
     internal static class Policy_NobleLevyRight_Create

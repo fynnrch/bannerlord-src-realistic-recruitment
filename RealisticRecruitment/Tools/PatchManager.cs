@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Library;
 
-namespace RealisticRecruitment
+namespace RealisticRecruitment.Tools
 {
     internal struct PatchError
     {

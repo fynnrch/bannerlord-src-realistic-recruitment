@@ -3,7 +3,9 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 
-namespace RealisticRecruitment
+using RealisticRecruitment.Tools;
+
+namespace RealisticRecruitment.Adjustments
 {
     [HarmonyPatch(typeof(DefaultVolunteerModel), nameof(DefaultVolunteerModel.GetDailyVolunteerProductionProbability))]
     public static class VolunteerSpawnrate
